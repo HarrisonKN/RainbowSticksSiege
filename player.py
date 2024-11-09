@@ -8,7 +8,7 @@ class Player():
         self.height = height
         self.color = color
         self.rect = (x,y,width,height)
-        self.vel = 1 #cant be 0.X
+        self.vel = 3 #cant be 0.X
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, self.rect)
