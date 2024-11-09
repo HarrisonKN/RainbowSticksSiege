@@ -7,9 +7,8 @@ class Player():
         self.width = width
         self.height = height
         self.color = color
+        self.rect = (x,y,width,height)
         self.vel = 1 #cant be 0.X
-
-        self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, self.rect)
@@ -18,13 +17,18 @@ class Player():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            self.rect.x -= self.vel
+            self.x -= self.vel
         
         if keys[pygame.K_RIGHT]:
-            self.rect.x += self.vel
+            self.x += self.vel
 
         if keys[pygame.K_DOWN]:
-            self.rect.y += self.vel
+            self.y += self.vel
 
         if keys[pygame.K_UP]:
-            self.rect.y -= self.vel
+            self.y -= self.vel
+        
+        self.update()
+
+    def update(self):
+        self.rect = (self.x,self.y,self.width,self.height)

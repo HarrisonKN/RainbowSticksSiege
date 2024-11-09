@@ -13,30 +13,50 @@ try:
 except socket.error as e:
     str(e)
 
-useSocket.listen(5)
+useSocket.listen()
 print("waiting for connection, Server Started")
 
 
-def threaded_client(connection):
+position = [(0,0),(100,100)] #player1 , player2
+
+def read_position(str):
+    str = str.split(",")
+    return int(str[0]),int(str[1])
+
+def send_position(tup):
+    return str(tup[0]) + "," +str(tup[1])
+
+def threaded_client(connection, currentPlayer):
+    connection.send(str.encode(send_position(position[currentPlayer])))
     reply = ""
     while True:
         try:
-            data = connection.recieve(2048)
-            reply = data.decode("utf-8")
+            data = read_position(connection.recv(2048).decode())
+            position[currentPlayer] = data
 
             if not data:
                 print("No Data, Client Disconnected")
                 break
             else:
-                print("Data Received: ", reply)
-                print("Sending: ". reply)
+                if currentPlayer == 1:
+                    reply = position[0]
+                else:
+                    reply = position[1]
+                print("Data Received: ", data)
+                print("Data Sending: ", reply)
             
-            connection.sendall(str.encode(reply))
+            connection.sendall(str.encode(send_position(reply)))
         except:
             break
+    
+    print("Lost Connection")
+    connection.close()
+
+currentPlayer = 0
 
 while True:
     connection,address = useSocket.accept()
     print("Connected to: ",address)
 
-    start_new_thread(threaded_client,(connection))
+    start_new_thread(threaded_client,(connection, currentPlayer))
+    currentPlayer += 1
