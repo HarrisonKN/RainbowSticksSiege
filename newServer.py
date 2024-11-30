@@ -2,6 +2,7 @@ import socket
 import pickle
 from _thread import *
 from player import Player
+from character import Character
 
 
 server = "192.168.0.169"
@@ -17,7 +18,7 @@ except socket.error as e:
 useSocket.listen()
 print("waiting for connection, Server Started")
 
-players = [Player(0,0,50,50,(255,0,0)), Player(100,100, 50,50,(0,255,0))]
+players = [Player(0,0,50,50,(255,0,0)), Player(100,100, 50,50,(0,255,0)), Character(100, 100, 'RainbowSticksSiege/Images/Characters/Fighter/Idle.png', speed=5, rows=2, columns=4) ]
 
 def threaded_client(connection, currentPlayer):
     connection.send(pickle.dumps(players[currentPlayer]))

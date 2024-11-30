@@ -1,6 +1,7 @@
 import pygame
 from player import Player
 from newNetwork import Network
+from character import Character
 
 
 width = 720
@@ -10,10 +11,14 @@ win = pygame.display.set_mode((width,height))
 pygame.display.set_caption("CLIENT")
 
 
-def redrawWindow(win, player1, player2): #Updates the window
+def redrawWindow(win, player1, player2, character): #Updates the window
     win.fill((255,255,255))
     player1.draw(win)
     player2.draw(win)
+
+    character.update(pygame.key.get_pressed())
+    win.blit(character.image, character.rect)
+
     pygame.display.update()
 
 
@@ -22,6 +27,8 @@ def main(): #runs the game loop checking for things
     nNetwork = Network()
 
     player1 = nNetwork.getPos()
+
+    character = Character(100, 100, 'RainbowSticksSiege/Images/Characters/Fighter/Idle.png', speed=5, rows=2, columns=4)
 
     clock = pygame.time.Clock()
 
@@ -38,7 +45,9 @@ def main(): #runs the game loop checking for things
                 pygame.quit()
 
         player1.move()
-        redrawWindow(win, player1, player2)
+        redrawWindow(win, player1, player2, character)
+
+    pygame.quit()
 
 
 main()
